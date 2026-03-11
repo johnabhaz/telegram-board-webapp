@@ -1,0 +1,19 @@
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<body>
+    <div class="container">
+        <h1>Доска объявлений</h1>
+        <div class="filters">
+            <select id="categorySelect">
+                <option value="">Все категории</option>
+            </select>
+            <input type="text" id="searchInput" placeholder="Поиск...">
+            <button id="searchBtn">Найти</button>
+        </div>
+        <div id="adsList"></div>
+        <div class="pagination">
+            <button id="prevBtn" disabled>← Назад</button>
+            <span id="pageInfo">Страница 1</span>
+            <button id="nextBtn" disabled>Вперёд →</button>
+        </div>
+    </div>
+</body>
