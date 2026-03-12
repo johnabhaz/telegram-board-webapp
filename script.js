@@ -147,10 +147,12 @@ document.getElementById('categorySelect').addEventListener('change', (e) => {
     loadAds();
 });
 
-document.getElementById('searchBtn').addEventListener('click', () => {
-    searchQuery = document.getElementById('searchInput').value;
-    currentPage = 1;
-    loadAds();
+document.getElementById('searchBtn').addEventListener('click', function() {
+  console.log('🔍 Кнопка "Найти" нажата');
+  searchQuery = document.getElementById('searchInput').value;
+  console.log('Поисковый запрос:', searchQuery);
+  currentPage = 1;
+  loadAds();
 });
 
 document.getElementById('prevBtn').addEventListener('click', () => {
