@@ -168,6 +168,6 @@ document.getElementById('nextBtn').addEventListener('click', () => {
 });
 
 // Инициализация
-const API_BASE_URL = 'https://ваш-сервер.railway.app'; // ЗАМЕНИТЕ на реальный адрес вашего API
+const API_BASE_URL = 'https://telegram-board-bot-production.up.railway.app'; // ЗАМЕНИТЕ на реальный адрес вашего API
 loadCategories();
 loadAds();
