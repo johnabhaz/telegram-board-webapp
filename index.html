@@ -1,7 +1,124 @@
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Доска объявлений</title>
+    <!-- Подключаем Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 16px;
+            background: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        select, input, button {
+            padding: 8px 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--tg-theme-hint-color, #ccc);
+            background: var(--tg-theme-bg-color, #fff);
+            color: var(--tg-theme-text-color, #000);
+        }
+        button {
+            background: var(--tg-theme-button-color, #40a7e3);
+            color: var(--tg-theme-button-text-color, #fff);
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .new-ad-btn {
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 12px;
+            font-weight: bold;
+            background: var(--tg-theme-button-color, #40a7e3);
+        }
+        .ads-list {
+            list-style: none;
+            padding: 0;
+        }
+        .ad-item {
+            padding: 12px;
+            border-bottom: 1px solid var(--tg-theme-hint-color, #ccc);
+        }
+        .ad-item h3 {
+            margin: 0 0 8px;
+            font-size: 18px;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-top: 20px;
+        }
+        /* Стили для модального окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .modal-content {
+            background: var(--tg-theme-bg-color, #fff);
+            margin: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+        .modal h3 {
+            margin-top: 0;
+        }
+        .modal select, .modal textarea, .modal input {
+            width: 100%;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .modal-buttons button {
+            flex: 1;
+        }
+    </style>
+</head>
 <body>
     <div class="container">
-        <h1>Доска объявлений</h1>
+        <h1>📋 Доска объявлений</h1>
+        
+        <!-- Кнопка для открытия формы нового объявления -->
+        <button id="newAdBtn" class="new-ad-btn">➕ Новое объявление</button>
+        
+        <!-- Фильтры -->
         <div class="filters">
             <select id="categorySelect">
                 <option value="">Все категории</option>
@@ -9,11 +126,35 @@
             <input type="text" id="searchInput" placeholder="Поиск...">
             <button id="searchBtn">Найти</button>
         </div>
-        <div id="adsList"></div>
+        
+        <!-- Список объявлений -->
+        <div id="adsList" class="ads-list"></div>
+        
+        <!-- Пагинация -->
         <div class="pagination">
             <button id="prevBtn" disabled>← Назад</button>
             <span id="pageInfo">Страница 1</span>
             <button id="nextBtn" disabled>Вперёд →</button>
         </div>
     </div>
+    
+    <!-- Модальное окно для подачи нового объявления -->
+    <div id="adFormModal" class="modal">
+        <div class="modal-content">
+            <h3>📝 Подать объявление</h3>
+            <select id="newAdCategorySelect">
+                <!-- категории будут загружены скриптом -->
+            </select>
+            <textarea id="adText" placeholder="Текст объявления" rows="4"></textarea>
+            <input type="file" id="adPhoto" accept="image/*">
+            <div class="modal-buttons">
+                <button id="submitAd">Отправить</button>
+                <button id="cancelAd">Отмена</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Подключение основного скрипта -->
+    <script src="script.js"></script>
 </body>
+</html>
