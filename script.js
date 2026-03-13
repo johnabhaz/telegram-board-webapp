@@ -98,12 +98,18 @@ document.getElementById('cancelAd').addEventListener('click', () => {
 });
 
 // Отправка нового объявления
-document.getElementById('submitAd').addEventListener('click', () => {
+// Отправка нового объявления (единый API с фото)
+document.getElementById('submitAd').addEventListener('click', async () => {
     const categorySelect = document.getElementById('newAdCategorySelect');
     const categoryId = categorySelect.value;
     const text = document.getElementById('adText').value.trim();
     const photoFile = document.getElementById('adPhoto').files[0];
+    const userId = tg.initDataUnsafe?.user?.id;
 
+    if (!userId) {
+        alert('Ошибка: не удалось определить пользователя');
+        return;
+    }
     if (!categoryId) {
         alert('Выберите категорию');
         return;
@@ -113,26 +119,36 @@ document.getElementById('submitAd').addEventListener('click', () => {
         return;
     }
 
-    // Формируем данные для отправки боту
-    const data = {
-        action: 'createAd',
-        categoryId: parseInt(categoryId),
-        text: text
-    };
-
-    // Отправляем данные боту (WebApp автоматически закроется после отправки)
-    tg.sendData(JSON.stringify(data));
-
-    // Если выбрано фото – напоминаем отправить его в чат
+    // Создаём FormData и добавляем поля
+    const formData = new FormData();
+    formData.append('userId', userId);
+    formData.append('categoryId', categoryId);
+    formData.append('text', text);
     if (photoFile) {
-        alert('✅ Текст объявления отправлен! Теперь отправьте фото в чат с ботом.');
-    } else {
-        alert('✅ Объявление отправлено на модерацию!');
+        formData.append('photo', photoFile);
     }
 
-    // Закрываем модальное окно (sendData уже закрывает WebApp, но для порядка)
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/createAd`, {
+            method: 'POST',
+            body: formData,
+            // Не устанавливаем Content-Type – браузер сам поставит правильный с boundary
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert('✅ Объявление отправлено на модерацию!');
+            tg.close(); // Закрываем WebApp
+        } else {
+            alert('❌ Ошибка: ' + (result.error || 'Неизвестная ошибка'));
+        }
+    } catch (error) {
+        console.error('Ошибка отправки:', error);
+        alert('❌ Ошибка соединения с сервером');
+    }
+
+    // Закрываем модальное окно и очищаем поля (на случай, если WebApp не закрылся)
     document.getElementById('adFormModal').style.display = 'none';
-    // Очищаем поля
     document.getElementById('adText').value = '';
     document.getElementById('adPhoto').value = '';
     if (categorySelect.options.length) categorySelect.selectedIndex = 0;
@@ -168,6 +184,8 @@ document.getElementById('nextBtn').addEventListener('click', () => {
         loadAds();
     }
 });
+
+const API_BASE_URL = 'http://localhost:3000';
 
 // Инициализация
 const API_BASE_URL = 'https://telegram-board-bot-production.up.railway.app'; // ЗАМЕНИТЕ на реальный адрес вашего API
