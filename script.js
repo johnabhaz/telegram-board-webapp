@@ -185,8 +185,6 @@ document.getElementById('nextBtn').addEventListener('click', () => {
     }
 });
 
-//const API_BASE_URL = 'http://localhost:3000';
-
 // Инициализация
 const API_BASE_URL = 'https://telegram-board-bot-production.up.railway.app'; // ЗАМЕНИТЕ на реальный адрес вашего API
 loadCategories();
