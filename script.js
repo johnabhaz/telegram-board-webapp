@@ -185,6 +185,10 @@ document.getElementById('nextBtn').addEventListener('click', () => {
     }
 });
 
+document.getElementById('startBotBtn').addEventListener('click', () => {
+    tg.openTelegramLink('https://t.me/john_board_bot?start=from_webapp');
+});
+
 // Инициализация
 const API_BASE_URL = 'https://telegram-board-bot-production.up.railway.app'; // ЗАМЕНИТЕ на реальный адрес вашего API
 loadCategories();
